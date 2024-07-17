@@ -16,10 +16,14 @@ export default async function handler(request, response) {
   if (request.method === "PATCH") {
     try {
       const placeData = request.body;
-      await Place.findByIdAndUpdate(id, placeData);
-      return response.status(200).json({ status: "Places Updated!" });
+      await Place.findByIdAndUpdate(id, { $set: placeData });
+      return response.status(200).json({ status: "Place Updated!" });
     } catch (error) {
       return response.status(400).json({ error: error.message });
     }
+  }
+  if (request.method === "DELETE") {
+    await Place.findByIdAndDelete(id);
+    return response.status(200).json({ status: "Place Deleted" });
   }
 }
