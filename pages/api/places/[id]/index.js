@@ -1,5 +1,6 @@
 import dbConnect from "@/db/connect";
 import Place from "@/db/models/Place";
+import { resolve } from "styled-jsx/css";
 
 export default async function handler(request, response) {
   await dbConnect();
@@ -11,5 +12,14 @@ export default async function handler(request, response) {
       return response.status(404).json({ status: "Not found!" });
     }
     return response.status(200).json(place);
+  }
+  if (request.method === "PATCH") {
+    try {
+      const placeData = request.body;
+      await Place.findByIdAndUpdate(id, placeData);
+      return response.status(200).json({ status: "Places Updated!" });
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
   }
 }
